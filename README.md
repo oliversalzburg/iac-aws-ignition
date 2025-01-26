@@ -8,7 +8,7 @@ You have a pristine AWS account that is owned exclusively by you.
 This is not an AWS account that your enterprise provisioned for you.
 You can sign in as the root user and no other users exist.
 
-## Manual AWS Web Console steps
+## Manual AWS Management Console Steps
 
 1. Go to your **Security credentials** settings and add an MFA device to the root user.
 
@@ -16,7 +16,8 @@ You can sign in as the root user and no other users exist.
 
 1. In the **IAM** console, create a new **User**.
 
-   Any name is fine. We assume `igniter` for this document. This user **DOES NOT** have AWS Management Console access.
+   Any account-local unique name is fine. We assume `igniter` for this document.  
+   This user **DOES NOT** have AWS Management Console access.
 
    **Attach policies directly**, and select the **AdministratorAccess** policy.
 
@@ -43,7 +44,7 @@ You can sign in as the root user and no other users exist.
    Verify setup with `aws --profile igniter-mfa sts get-caller-identity`
 
 > [!WARNING]
-> Don't skip switching over to the MFA session. We will break the authentication mechanism for static keys during further setup.
+> Don't skip switching over to the MFA session. We will break the ability to operate in single-factor-authenticated sessions during further setup.
 
 ## IaC Backend Deployment
 
