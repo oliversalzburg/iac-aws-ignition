@@ -16,7 +16,7 @@ You can sign in as the root user and no other users exist.
 
 1. Go to your **Security credentials** settings and add an MFA device to the root user.
 
-   Any unique name is fine. We assume `mfa-root` for this document.
+   Any account-local unique name is fine. We assume `mfa-root` for this document.
 
 1. In the **IAM** console, create a new **User**.
 
@@ -26,7 +26,7 @@ You can sign in as the root user and no other users exist.
 
 1. Add an MFA device to the `igniter` user.
 
-   Any unique name is fine. We assume `mfa-igniter` for this document.
+   Any account-local unique name is fine. We assume `mfa-igniter` for this document.
 
 1. Add an Access key to the `igniter` user.
 

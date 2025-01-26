@@ -6,7 +6,7 @@ locals {
 # In general, we don't even want IAM users to log into the AWS web console.
 # So they shouldn't even have a password to begin with.
 # If a password is assigned for whatever reason, it must be strong, and only
-# valid temporarily. Thus, any assigned password auto-expires after 30 days.
+# be valid temporarily. Thus, any assigned password auto-expires after 30 days.
 resource "aws_iam_account_password_policy" "this" {
   allow_users_to_change_password = true
   hard_expiry                    = true
