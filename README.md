@@ -46,8 +46,8 @@ You can sign in as the root user and no other users exist.
 
    Verify setup with `aws --profile igniter-mfa sts get-caller-identity`
 
-   > [!WARNING]
-   > Don't skip switching over to the MFA session. We will break the authentication mechanism for static keys during further setup.
+> [!WARNING]
+> Don't skip switching over to the MFA session. We will break the authentication mechanism for static keys during further setup.
 
 ## IaC Backend Deployment
 
