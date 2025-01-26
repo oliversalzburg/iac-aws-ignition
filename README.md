@@ -10,27 +10,27 @@ You can sign in as the root user and no other users exist.
 
 ## Manual AWS Web Console steps
 
-1. Go to your __Account__ settings and enable __IAM user and role access to Billing information__.
+1. Go to your **Account** settings and enable **IAM user and role access to Billing information**.
 
-   We do not want to have to sign in as `root` for billing information. We will delegate the permissions.
+   We do not want to have to sign in as the root user for billing information. We will delegate the permissions.
 
-2. Go to your __Security credentials__ settings and add an MFA device to the `root` user.
+1. Go to your **Security credentials** settings and add an MFA device to the root user.
 
    Any unique name is fine. We assume `mfa-root` for this document.
 
-3. In the __IAM__ console, create a new __User__.
+1. In the **IAM** console, create a new **User**.
 
-   Any name is fine. We assume `igniter` for this document. This user __DOES NOT__ have AWS Management Console access.
+   Any name is fine. We assume `igniter` for this document. This user **DOES NOT** have AWS Management Console access.
 
-   __Attach policies directly__, and select the __AdministratorAccess__ policy.
+   **Attach policies directly**, and select the **AdministratorAccess** policy.
 
-4. Add an MFA device to the `igniter` user.
+1. Add an MFA device to the `igniter` user.
 
    Any unique name is fine. We assume `mfa-igniter` for this document.
 
-5. Add an Access key to the `igniter` user.
+1. Add an Access key to the `igniter` user.
 
-   Use the __Download .csv file__ button to grab the credentials. We assume the file is called `igniter_accessKeys.csv`.
+   Use the **Download .csv file** button to grab the credentials. We assume the file is called `igniter_accessKeys.csv`.
 
    Add the missing `User Name` field to the first line of the `.csv` file, and add the user name on the second line in the same column.
 
@@ -42,12 +42,12 @@ You can sign in as the root user and no other users exist.
 
    Verify setup with `aws --profile igniter sts get-caller-identity`
 
-6. Use [`aws-mfa-auth.sh`](https://github.com/toshitanaa/aws-cli-mfa-auth) to establish a temporary session.
+1. Use [`aws-mfa-auth.sh`](https://github.com/toshitanaa/aws-cli-mfa-auth) to establish a temporary session.
 
    Verify setup with `aws --profile igniter-mfa sts get-caller-identity`
 
-   > \[!WARNING]
-   > Don't skip switching over to the MFA session. We will break the login mechanism for static keys during further setup.
+   > [!WARNING]
+   > Don't skip switching over to the MFA session. We will break the authentication mechanism for static keys during further setup.
 
 ## IaC Backend Deployment
 
