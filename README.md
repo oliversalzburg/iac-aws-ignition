@@ -10,10 +10,6 @@ You can sign in as the root user and no other users exist.
 
 ## Manual AWS Web Console steps
 
-1. Go to your **Account** settings and enable **IAM user and role access to Billing information**.
-
-   We do not want to have to sign in as the root user for billing information. We will delegate the permissions.
-
 1. Go to your **Security credentials** settings and add an MFA device to the root user.
 
    Any account-local unique name is fine. We assume `mfa-root` for this document.
