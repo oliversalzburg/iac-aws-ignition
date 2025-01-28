@@ -32,29 +32,12 @@ resource "aws_iam_group" "everyone" {
   name = "Everyone"
   path = "/"
 }
-resource "aws_iam_group" "owner" {
-  name = "Owners"
-  path = "/"
-}
-resource "aws_iam_group" "administrator" {
-  name = "Administrators"
-  path = "/"
-}
-resource "aws_iam_group" "auditor" {
-  name = "Auditors"
-  path = "/"
-}
 data "aws_iam_session_context" "caller" {
   arn = data.aws_caller_identity.current.arn
 }
 resource "aws_iam_user_group_membership" "caller" {
-  user = local.caller_identity_friendly_name
-  groups = [
-    aws_iam_group.everyone.name,
-    aws_iam_group.owner.name,
-    aws_iam_group.administrator.name,
-    # The caller is NOT an auditor.
-  ]
+  user   = local.caller_identity_friendly_name
+  groups = [aws_iam_group.everyone.name]
 }
 
 # From https://repost.aws/knowledge-center/mfa-iam-user-aws-cli
