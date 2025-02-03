@@ -48,20 +48,37 @@ You can sign in as the root user and no other users exist.
 
 ## IaC Backend Deployment
 
-1. Deploy a new IaC state storage backend using [`iac-aws-bootstrap`](https://github.com/oliversalzburg/iac-aws-bootstrap):
+Deploy a new IaC state storage backend using [`iac-aws-bootstrap`](https://github.com/oliversalzburg/iac-aws-bootstrap):
 
-   ```shell
-   AWS_PROFILE=igniter-mfa AWS_REGION=eu-west-1 terraform apply
-   ./display-backend.tf.sh > backend.tf
-   ```
+```shell
+AWS_PROFILE=igniter-mfa AWS_REGION=eu-west-1 terraform apply
+./display-backend.tf.sh > backend.tf
+```
 
-   Copy the `backend.tf` to the `terraform` folder in this workspace.
+1.  If you haven't already, take note of the `id` of the `seed` for your backend:
+
+    ```shell
+    terraform output seed
+    ```
+
+1.  Copy the `backend.tf` to the `terraform` folder in this workspace.
 
 ## Next steps
 
-1. Deploy the configuration in the `terraform` folder.
+1.  Deploy the configuration in the `terraform` folder.
 
-   ```shell
-   AWS_PROFILE=igniter-mfa AWS_REGION=eu-west-1 terraform init
-   AWS_PROFILE=igniter-mfa AWS_REGION=eu-west-1 terraform apply
-   ```
+    ```shell
+    AWS_PROFILE=igniter-mfa AWS_REGION=eu-west-1 \
+        terraform init && \
+        terraform apply -var="github_owner=owner/repo"
+    ```
+
+1.  Prepare the handover to GitHub IaC management.
+
+    ```shell
+    terraform output github
+    ```
+
+1.  [Create a new repository secret](settings/secrets/actions/new) named `IAC_ARN` and put the `github.role_arn` inside the secret.
+
+1.  [Create a new repository secret](settings/secrets/actions/new) named `IAC_SEED` and put the `seed.id` inside the secret.
