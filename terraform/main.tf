@@ -1,3 +1,4 @@
+data "aws_partition" "current" {}
 data "aws_caller_identity" "current" {}
 locals {
   caller_identity_friendly_name = split("/", data.aws_caller_identity.current.arn)[1]
@@ -84,6 +85,64 @@ resource "aws_iam_group_policy_attachment" "enforce_mfa" {
   policy_arn = aws_iam_policy.enforce_mfa.arn
 }
 
+data "tls_certificate" "github" {
+  url = "https://token.actions.githubusercontent.com"
+}
+resource "aws_iam_openid_connect_provider" "github" {
+  url            = "https://token.actions.githubusercontent.com"
+  client_id_list = ["sts.${data.aws_partition.current.dns_suffix}"]
+  thumbprint_list = distinct(
+    concat(
+      data.tls_certificate.github.certificates[*].sha1_fingerprint,
+      [
+        "6938fd4d98bab03faadb97b34396831e3780aea1",
+        "1c58a3a8518e8759bf075b76b750d4f2df264fcd"
+      ]
+    )
+  )
+}
+data "aws_iam_policy_document" "github" {
+  statement {
+    sid    = "GithubOidcAuth"
+    effect = "Allow"
+    actions = [
+      "sts:TagSession",
+      "sts:AssumeRoleWithWebIdentity"
+    ]
+
+    principals {
+      type        = "Federated"
+      identifiers = ["arn:${data.aws_partition.current.id}:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"]
+    }
+
+    condition {
+      test     = "ForAllValues:StringEquals"
+      variable = "token.actions.githubusercontent.com:iss"
+      values   = ["https://token.actions.githubusercontent.com"]
+    }
+
+    condition {
+      test     = "ForAllValues:StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:${var.github_origin}"]
+    }
+  }
+}
+resource "aws_iam_role" "github" {
+  assume_role_policy    = data.aws_iam_policy_document.github.json
+  description           = "GitHub Actions"
+  force_detach_policies = true
+  max_session_duration  = 3600
+  name                  = "github-actions"
+  path                  = "/"
+}
+
 output "caller_identity" {
   value = {
     account_id = data.aws_caller_identity.current.account_id
@@ -91,5 +150,10 @@ output "caller_identity" {
     id         = data.aws_caller_identity.current.id
     user_id    = data.aws_caller_identity.current.user_id
     user_name  = local.caller_identity_friendly_name
+  }
+}
+output "github" {
+  value = {
+    role_arn = aws_iam_role.github.arn
   }
 }
