@@ -1,5 +1,8 @@
 # AWS IaC Igniter
 
+> [!CAUTION]
+> While this was routine for some time, I hardly ever spin up AWS account now. Thus, this repository has been **archived as of 2026-03-22**.
+
 From `root` to routine.
 
 ## Assumptions
